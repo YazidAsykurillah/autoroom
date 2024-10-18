@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 use App\User;
 
@@ -31,6 +32,10 @@ class UserController extends Controller
      */
     public function create()
     {
+        if(\Auth::user()->canNot('Manage User')){
+            return abort('403');
+        }
+
         $role_options = \App\Role::query()
             ->where('name','!=','Super Admin')
             ->get();
@@ -92,6 +97,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        if(\Auth::user()->canNot('Manage User')){
+            return abort('403');
+        }
+        
         $user = User::findOrFail($id);
         $role_options = \App\Role::query()
             ->where('name','!=','Super Admin')
@@ -108,9 +117,31 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
-        //
+        $response=[];
+        //return $request->role_name;
+        try {
+            $user = User::findOrFail($id);
+            $user->code = $request->code;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
+
+            //if there are submitted roles then assign user to the roles
+            $roles = $request->role_name;
+            if($roles){
+                $user->syncRoles($roles);  
+            }
+
+            $response['status'] = TRUE;
+            $response['message'] = 'User has been updated';
+            $response['data']['url'] = url('/user/'.$user->id);
+            
+        } catch (Exception $e) {
+            return $e;
+        }
+        return response()->json($response);
     }
 
     /**

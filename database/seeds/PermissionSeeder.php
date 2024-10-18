@@ -13,15 +13,29 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permission_1 = Permission::updateOrCreate(
-            ['name' => 'create-user'],
-            ['name' => 'create-user']
+            ['name' => 'Manage User'],
+            ['name' => 'Manage User']
         );
         $permission_1->syncRoles(['Admin']);
 
         $permission_2 = Permission::updateOrCreate(
-            ['name' => 'manage-blog'],
-            ['name' => 'manage-blog']
+            ['name' => 'Manage Role'],
+            ['name' => 'Manage Role']
         );
         $permission_2->syncRoles(['Admin']);
+
+        $permission_3 = Permission::updateOrCreate(
+            ['name' => 'Manage Permission'],
+            ['name' => 'Manage Permission']
+        );
+        $permission_3->syncRoles(['Admin']);
+
+
+
+        $permission_4 = Permission::updateOrCreate(
+            ['name' => 'Manage Blog'],
+            ['name' => 'Manage Blog']
+        );
+        $permission_4->syncRoles(['Admin']);
     }
 }

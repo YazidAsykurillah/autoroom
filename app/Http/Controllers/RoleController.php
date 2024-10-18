@@ -1,0 +1,111 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use App\Role;
+
+class RoleController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('role.index');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $role = Role::findORFail($id);
+        $permissions =  \App\Permission::query()
+            ->get();
+        return view('role.show')
+            ->with('role', $role)
+            ->with('permissions', $permissions);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+
+    public function synchronizePermission(Request $request){
+        $response=[];
+        try {
+            $mode = $request->mode;
+            $role = Role::findORFail($request->role_id);
+            $permission_name = $request->permission_name;
+            if($mode =='assign'){
+                $role->givePermissionTo($permission_name);
+            }else{
+                $role->revokePermissionTo($permission_name);
+            }
+
+            
+        } catch (Exception $e) {
+            
+        }
+        return response()->json($response);
+    }
+}

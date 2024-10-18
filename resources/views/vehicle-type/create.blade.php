@@ -1,11 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'Edit User')
+@section('title', 'Create Vehicle Type')
 
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Edit User</h1>
+            <h1 class="m-0">Create Vehicle Type</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">                
@@ -15,11 +15,11 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="/user">
-                        Users
+                    <a href="/vehicle-type">
+                        Vehicle Type
                     </a>
                 </li>
-                <li class="breadcrumb-item active">Edit</li>
+                <li class="breadcrumb-item active">Create</li>
             </ol>
         </div><!-- /.col -->
     </div>
@@ -27,11 +27,10 @@
 
 @section('content')
     <div class="card">
-        <form class="" id="form-edit-user" action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+        <form class="" id="form-create" action="{{ url('/vehicle-type')}}" method="POST">
             @csrf
-            @method('PUT')
             <div class="card-header">
-                <h3 class="card-title">Form Edit Users</h3>
+                <h3 class="card-title">Form Create Vehicle Types</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -46,19 +45,19 @@
                                 <div class="form-group row">
                                     <label for="code" class="col-sm-3 col-form-label">Code</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="code" placeholder="Code of the user" value="{{ old('code', $user->code) }}">
+                                        <input type="text" class="form-control" name="code" placeholder="Code of the vehicle-type">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-3 col-form-label">Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="name" value="{{ old('name',$user->name) }}" placeholder="Name of the user">
+                                        <input type="text" class="form-control" name="name" placeholder="Name of the vehicle-type">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="email" class="col-sm-3 col-form-label">Email</label>
                                     <div class="col-sm-9">
-                                        <input type="email" class="form-control" name="email" value="{{ old('email', $user->email) }}" placeholder="Email of the user">
+                                        <input type="email" class="form-control" name="email" placeholder="Email of the vehicle-type">
                                     </div>
                                 </div>
                             </div>
@@ -71,16 +70,7 @@
                             <div class="card-header">Roles</div>
                             <div class="card-body">
                                 <div class="form-group">
-                                @if($role_options->count() >0)
-                                    @foreach($role_options as $role_option)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="role_name[]" value="{{ $role_option->name }}" {{$user->hasRole($role_option->name) ? 'checked' : ''}}>
-                                        <label class="form-check-label">
-                                            {{ $role_option->name }}
-                                        </label>
-                                    </div>
-                                    @endforeach
-                                @endif
+                                
                               </div>
                             </div>
                         </div>
@@ -89,8 +79,8 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="/user" class="btn btn-default">Cancel</a>
-                <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Update</button>
+                <a href="/vehicle-type" class="btn btn-default">Cancel</a>
+                <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -103,8 +93,8 @@
 @section('js')
 <script type="text/javascript">
 $(document).ready(function(){
-    //Block store user event
-    $('#form-edit-user').on('submit', function(event){
+    //Block store vehicle-type event
+    $('#form-create').on('submit', function(event){
         event.preventDefault();
         let url = $(this).attr('action');
         $.ajax({
@@ -113,12 +103,12 @@ $(document).ready(function(){
             data: $(this).serialize(),
             dataType: 'json',
             beforeSend:function(){
-                $('#form-edit-user').find("button[type='submit']").prop('disabled', true);
+                $('#form-create').find("button[type='submit']").prop('disabled', true);
             },
             success: function(data){
                 console.log(data);
                 if(data.status == true){
-                    $('#form-edit-user')[0].reset();
+                    $('#form-create')[0].reset();
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
@@ -127,10 +117,10 @@ $(document).ready(function(){
                         icon: 'success',
                         title: data.message
                     });
-                    $('#form-edit-user').find("button[type='submit']").prop('disabled', false);
+                    $('#form-create').find("button[type='submit']").prop('disabled', false);
                     window.location.href = data.data.url;
                 }else{
-                    $('#form-edit-user').find("button[type='submit']").prop('disabled', false);
+                    $('#form-create').find("button[type='submit']").prop('disabled', false);
                 }
             },
             error: function(jqXHR, textStatus, errorThrown){
@@ -153,11 +143,11 @@ $(document).ready(function(){
                     subtitle: ' Validation error',
                     body: error_template
                 });
-                $('#form-edit-user').find("button[type='submit']").prop('disabled', false);
+                $('#form-create').find("button[type='submit']").prop('disabled', false);
             }
         });
     });
-    //ENDBlock store user event
+    //ENDBlock store vehicle-type event
 });
 </script>
 @stop

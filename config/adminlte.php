@@ -318,7 +318,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Vehicle Type',
-                    'url' => '#',
+                    'url' => 'vehicle-type',
                 ],
                 [
                     'text' => 'Brand',
@@ -330,6 +330,21 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'Configuration',
+            'icon' => 'fas fa-fw fa-cogs',
+            'submenu' => [
+                [
+                    'text' => 'Role',
+                    'url' => 'role',
+                ],
+                [
+                    'text' => 'Permission',
+                    'url' => 'permission',
+                ],
+            ],
+        ],
+
         [
             'text' => 'blog',
             'url' => 'admin/blog',

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class StoreVehicleTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,13 +23,9 @@ class StoreUserRequest extends FormRequest
      */
     public function rules()
     {
-        $rules =  [
-            'name'=>'required',
-            'email'=>'required|email|unique:users,email',
-            'code'=>'required|unique:users,code',
-            // role validation rules
-            'role_name'=> 'required|array|min:1',
-            'role_name.*'=> 'required|string|distinct|min:3',
+        $rules = [
+            'name'=>'required|unique:vehicle_types,name',
+            'description'=>'required'
         ];
         return $rules;
     }

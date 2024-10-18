@@ -1,11 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'Users')
+@section('title', 'Roles')
 
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0">Users</h1>
+            <h1 class="m-0">Roles</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">                
@@ -14,7 +14,7 @@
                         <i class="fas fa-home"></i>
                     </a>
                 </li>
-                <li class="breadcrumb-item active">Users</li>
+                <li class="breadcrumb-item active">Roles</li>
             </ol>
         </div><!-- /.col -->
     </div>
@@ -23,27 +23,24 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">User List</h3>
+            <h3 class="card-title">Role List</h3>
             <div class="card-tools">
-                
-                <a href="/user/create" class="btn btn-default btn-sm">
+                <a href="/role/create" class="btn btn-default btn-sm">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
-                <button type="button" id="btn-delete" class="btn btn-default btn-sm" title="Delete selected users">
+                <button type="button" id="btn-delete" class="btn btn-default btn-sm" title="Delete selected Roles">
                     <i class="fas fa-trash-alt"></i>
                 </button>
-                
             </div>
         </div>
         <div class="card-body">
-            <table id="table-user" class="table table-bordered table-hover">
+            <table id="table-role" class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <th style="width: 5%;text-align: center;">#</th>
                         <th style="width: 20%;">Code</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Roles</th>
+                        <th>Guard</th>
                         <th style="width:10%; text-align:center;">Action</th>
                     </tr>
                 </thead>
@@ -63,40 +60,28 @@
 @section('js')
 <script type="text/javascript">
 $(document).ready(function(){
-    var userDT = $('#table-user').DataTable({
+    var roleDT = $('#table-role').DataTable({
         processing: true,
         serverSide: true,
         select: {
             style: 'multi',
             selector: 'td:first-child'
         },
-        ajax: "{{ url('user/datatables') }}",
+        ajax: "{{ url('role/datatables') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', className:'text-center', searchable:false, orderable:false},
             {data: 'code', name: 'code', render:function(data, type, row, meta){
                 let code_template='';
-                    code_template+='<a href="/user/'+row.id+'">';
+                    code_template+='<a href="/role/'+row.id+'">';
                     code_template+= data;
                     code_template+='</a>';
                 return code_template;
             }},
             {data: 'name', name: 'name'},
-            {data: 'email', name: 'email'},
-            {data: 'roles', name: 'roles.name',render:function(data, type, row, meta){
-
-                let roles_template = '';
-                if(row.roles.length >0){
-                    $.each( row.roles, function( key, value ){
-                        roles_template+='<span class="badge bg-info">';
-                        roles_template+=    value.name;
-                        roles_template+='</span>&nbsp;';
-                    });
-                }
-                return roles_template;
-            }},
+            {data: 'guard_name', name: 'guard_name'},
             {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center', render:function(data, type, row, meta){
                 let action ='';
-                    action+='<a class="btn btn-default btn-xs btn-edit" title="Edit" href="/user/'+row.id+'/edit">';
+                    action+='<a class="btn btn-default btn-xs btn-edit" title="Edit" href="/role/'+row.id+'/edit">';
                     action+=    '<i class="fas fa-edit"></i>';
                     action+='</a>';
                 return action;
@@ -108,7 +93,7 @@ $(document).ready(function(){
     });
 
     //Block data table button tools object
-    var dataTableButtonTools = new $.fn.dataTable.Buttons(userDT,{
+    var dataTableButtonTools = new $.fn.dataTable.Buttons(roleDT,{
         buttons: [
             {
                 extend: 'excelHtml5',
